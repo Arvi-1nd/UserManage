@@ -30,7 +30,9 @@ DEBUG = os.getenv("DEBUG") == "True"
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
 
-
+CSRF_TRUSTED_ORIGINS = [
+    "https://usermanage-mrfd.onrender.com",
+]
 # Application definition
 
 INSTALLED_APPS = [
