@@ -28,7 +28,7 @@ schema_view = get_schema_view(
         contact=openapi.Contact(email="davidarvind44@gmail.com"),
         ),
         public=True,
-        permission_classes=(AllowAny,),
+        permission_classes=[AllowAny],
     
 )
 
