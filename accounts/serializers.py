@@ -64,6 +64,37 @@ class ChangePasswordSerializer(serializers.Serializer):
     
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from django.contrib.auth import authenticate
+from rest_framework import serializers
 
 class LoginSerializer(TokenObtainPairSerializer):
     username_field = "email"
+
+    def validate(self, attrs):
+        email = attrs.get("email")
+        password = attrs.get("password")
+
+        if not email or not password:
+            raise serializers.ValidationError("Email and password are required")
+
+        user = authenticate(
+            request=self.context.get("request"),
+            username=email,   # 🔥 CRITICAL
+            password=password
+        )
+
+        if not user:
+            raise serializers.ValidationError("Invalid email or password")
+
+        if not user.is_active:
+            raise serializers.ValidationError("User account is inactive")
+
+        data = super().validate(attrs)
+        data["user"] = {
+            "id": user.id,
+            "email": user.email,
+            "full_name": user.full_name,
+            "role": user.role,
+        }
+        return data
+
