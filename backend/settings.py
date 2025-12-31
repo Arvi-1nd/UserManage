@@ -26,7 +26,8 @@ AUTH_USER_MODEL = "accounts.User"
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
-DEBUG = os.getenv("DEBUG") == "True"
+DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
 
@@ -179,6 +180,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:5173",
     "https://user-manage-three.vercel.app",
+    "https://usermanage-backend.azurewebsites.net",
 ]
 
 CORS_ALLOW_HEADERS = [
@@ -195,6 +197,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:5173",
     "https://user-manage-three.vercel.app",
+    "https://usermanage-backend.azurewebsites.net",
 ]
 
 AUTHENTICATION_BACKENDS = [
