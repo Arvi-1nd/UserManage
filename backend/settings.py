@@ -30,9 +30,6 @@ DEBUG = os.getenv("DEBUG") == "True"
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://*.onrender.com",
-]
 # Application definition
 
 INSTALLED_APPS = [
@@ -113,20 +110,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-CORS_ALLOW_ALL_ORIGINS = False
-
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://localhost:5173",  # Vite
-    "https://user-manage-three.vercel.app/",
-]
 
 
-from corsheaders.defaults import default_headers
-
-CORS_ALLOW_HEADERS = list(default_headers) + [
-    'authorization',
-]
 
 
 # Internationalization
@@ -174,6 +159,19 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
+
+# -------------------------
+# CORS & CSRF (Production)
+# -------------------------
+
+CORS_ALLOW_ALL_ORIGINS = False
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "https://user-manage-three.vercel.app",
+]
+
 CORS_ALLOW_HEADERS = [
     "authorization",
     "content-type",
@@ -187,5 +185,5 @@ CORS_ALLOW_HEADERS = [
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:5173",
-    "https://user-manage-three.vercel.app/",
+    "https://user-manage-three.vercel.app",
 ]
