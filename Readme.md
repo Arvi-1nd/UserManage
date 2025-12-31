@@ -7,9 +7,9 @@ The backend is deployed on **Railway**, and the frontend is built with **React (
 
 ## 🔗 Live Demo
 
-- **Backend API**: https://<your-backend>.up.railway.app/
-- **Swagger Docs**: https://<your-backend>.up.railway.app/swagger/
-- **Frontend**: https://<your-frontend-url>
+- **Backend API**: https://usermanage-production.up.railway.app/
+
+- **Frontend**: https://user-manage-three.vercel.app/
 
 ---
 
