@@ -8,6 +8,9 @@ from .permissions import IsAdminRole
 from .models import User
 from rest_framework.pagination import PageNumberPagination
 from .pagination import AdminUserPagination
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import LoginSerializer
+
 
 class SignupView(APIView):
     permission_classes = []
@@ -137,3 +140,6 @@ class UpdateProfileView(APIView):
             },
             status=status.HTTP_200_OK
         )
+        
+class LoginView(TokenObtainPairView):
+    serializer_class = LoginSerializer
