@@ -187,3 +187,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "https://user-manage-three.vercel.app",
 ]
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+]

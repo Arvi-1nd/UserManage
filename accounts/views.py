@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.contrib.auth import authenticate
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import SignupSerializer,UserProfileSerializer, ChangePasswordSerializer, UpdateProfileSerializer
@@ -141,5 +142,50 @@ class UpdateProfileView(APIView):
             status=status.HTTP_200_OK
         )
         
-class LoginView(TokenObtainPairView):
-    serializer_class = LoginSerializer
+
+class LoginView(APIView):
+    permission_classes = []
+
+    def post(self, request):
+        email = request.data.get("email")
+        password = request.data.get("password")
+
+        if not email or not password:
+            return Response(
+                {"detail": "Email and password are required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        user = authenticate(
+            request=request,
+            username=email,   # 🔥 EMAIL AS USERNAME
+            password=password
+        )
+
+        if not user:
+            return Response(
+                {"detail": "Invalid email or password"},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+        if not user.is_active:
+            return Response(
+                {"detail": "User account is inactive"},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        refresh = RefreshToken.for_user(user)
+
+        return Response(
+            {
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+                "user": {
+                    "id": user.id,
+                    "email": user.email,
+                    "full_name": user.full_name,
+                    "role": user.role,
+                }
+            },
+            status=status.HTTP_200_OK
+        )
