@@ -1,6 +1,6 @@
 import { useState } from "react";
-import api from "../api/axios";
 import { Link, useNavigate } from "react-router-dom";
+import api from "../api/axios";
 import Toast from "../components/Toast";
 
 export default function Signup() {
@@ -13,80 +13,106 @@ export default function Signup() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // --------------------
+  // Client-side validation
+  // --------------------
   const validate = () => {
-    if (!fullName || !email || !password || !confirm)
+    if (!fullName || !email || !password || !confirm) {
       return "All fields are required";
+    }
 
-    if (!email.includes("@"))
+    if (!email.includes("@")) {
       return "Invalid email format";
+    }
 
-    if (password.length < 8)
+    if (password.length < 8) {
       return "Password must be at least 8 characters";
+    }
 
-    if (!/[0-9]/.test(password) || !/[!@#$%^&*]/.test(password))
+    if (!/[0-9]/.test(password) || !/[!@#$%^&*]/.test(password)) {
       return "Password must include a number and special character";
+    }
 
-    if (password !== confirm)
+    if (password !== confirm) {
       return "Passwords do not match";
+    }
 
     return null;
   };
 
+  // --------------------
+  // Submit handler
+  // --------------------
   const submit = async (e) => {
     e.preventDefault();
-    const err = validate();
-    if (err) {
-      setError(err);
+    setError("");
+
+    const validationError = validate();
+    if (validationError) {
+      setError(validationError);
       return;
     }
 
     try {
       setLoading(true);
-      await api.post("/signup/", {
+
+      // ⚠️ IMPORTANT: NO leading slash here
+      await api.post("signup/", {
         email,
         full_name: fullName,
         password,
       });
+
+      // Redirect after successful signup
       navigate("/login");
     } catch (err) {
-      setError(err.response?.data?.email?.[0] || "Signup failed");
+      const data = err.response?.data;
+
+      setError(
+        data?.email?.[0] ||
+        data?.password?.[0] ||
+        data?.detail ||
+        "Signup failed"
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div>
+    <div className="container">
       <h2>Signup</h2>
 
       <form onSubmit={submit}>
         <input
+          type="text"
           placeholder="Full Name"
           value={fullName}
-          onChange={e => setFullName(e.target.value)}
+          onChange={(e) => setFullName(e.target.value)}
         />
 
         <input
+          type="email"
           placeholder="Email"
           value={email}
-          onChange={e => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
         />
 
         <input
           type="password"
           placeholder="Password"
           value={password}
-          onChange={e => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
         />
 
         <input
           type="password"
           placeholder="Confirm Password"
           value={confirm}
-          onChange={e => setConfirm(e.target.value)}
+          onChange={(e) => setConfirm(e.target.value)}
         />
 
-        <button disabled={loading}>
+        <button type="submit" disabled={loading}>
           {loading ? "Signing up..." : "Signup"}
         </button>
       </form>
@@ -95,7 +121,7 @@ export default function Signup() {
         Already have an account? <Link to="/login">Login</Link>
       </p>
 
-      <Toast message={error} type="error" />
+      {error && <Toast message={error} type="error" />}
     </div>
   );
 }
