@@ -118,7 +118,7 @@ CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:5173",  # Vite
-    "https://user-manage.vercel.app",
+    "https://user-manage-three.vercel.app/",
 ]
 
 
@@ -187,5 +187,5 @@ CORS_ALLOW_HEADERS = [
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:5173",
-    "https://your-frontend.vercel.app",
+    "https://user-manage-three.vercel.app/",
 ]
